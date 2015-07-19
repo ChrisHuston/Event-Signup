@@ -1,0 +1,66 @@
+<div ng-if="user.priv_level > 2" class="form-inline no-print" style="margin-bottom: 10px;">
+    <input class="form-control" type="text" ng-model="masquerade.net_id" placeholder="Masquerade Net ID">
+    <input class="form-control" type="text" ng-model="masquerade.user_name" placeholder="Masquerade User Name" style="width:350px;">
+</div>
+<div class="alert alert-info" ng-show="bridge_event.event_over===true">
+    <p>This event is over.</p>
+</div>
+<div class="alert alert-info" ng-show="openings > 0 && is_member===false && bridge_event.event_over===false">
+    <p><ng-pluralize count="total_registered" when="{'one':'1 person has',
+    'other':'{{total_registered}} people have'}"></ng-pluralize> registered. {{total_available-total_registered-total_past}} slots are still open.</p>
+</div>
+<div class="alert alert-info" ng-show="is_member && bridge_event.event_over===false">
+    <p>You are registered for this event. {{total_registered}} people have registered in total.</p>
+</div>
+<div class="alert alert-warning" ng-if="total_available != 0 && openings===0 && is_member===false && bridge_event.event_over===false">
+    <p>This event is full ({{total_available}}). <span ng-show="bridge_event.joined>0">Wait List: </span></p>
+    <div ng-show="bridge_event.has_wait_list ==='1'">
+        <p ng-hide="bridge_event.joined>0">If there is an opening, you will automatically be registered for the event and receive an email notification.</p>
+        <button ng-hide="on_wait_list || bridge_event.joined>0" class="btn btn-primary" ng-click="joinWaitList()">Join Wait List</button>
+        <ol style="margin-top:10px;">
+            <li ng-repeat="u in wait_list">{{u.user_name}} <i class="fa fa-trash-o k-cursor" ng-click="cancelWait(u)" ng-show="u.net_id==user.net_id || user.priv_level>2"></i></li>
+        </ol>
+    </div>
+</div>
+<table class="table table-condensed table-bordered no-print" ng-show="bridge_event.announcements.length != 0">
+    <tbody>
+    <tr>
+        <td class="table-header active">Announcements</td>
+    </tr>
+    <tr ng-repeat="ann in bridge_event.announcements" class="fhp-cursor">
+        <td>
+            <div class="media" style="margin-bottom: 5px;">
+                <div class="pull-left poster-img" ng-show="ann.canvas_img">
+                    <img ng-src="{{ann.canvas_img}}" class="media-object img-responsive img-rounded">
+                </div>
+                <div class="media-body">
+                    <h4><a ng-click="toggleShowAnnouncement(ann)" href>{{ann.title}}</a></h4>
+                    <p class="text-muted comment-src">By <a ng-href="mailto:{{ann.email}}?subject={{ann.title}}" target="_blank">{{ann.user_name}}</a>, posted on {{ann.post_date | date:"MMM dd, yyyy @ hh:mm a"}}</p>
+                </div>
+            </div>
+            <div ng-bind-html="ann.announcement_txt" ng-show="ann.show_announcement"></div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div>
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" ng-repeat="r in evt.rooms">
+        <table class="table table-striped table-condensed table-bordered">
+            <tbody>
+            <tr>
+                <td ng-show="r.room_start" class="text-center" style="width:75px;" ng-class="{oddday:r.day_num%2===1, evenday:r.day_num%2===0}"><strong>{{r.room_start | date:'MMM d'}}<br/>
+                    {{r.room_start | date:'EEE'}}</strong></td>
+                <td class="text-center" ng-class="{oddday:r.day_num%2===1, evenday:r.day_num%2===0}"><strong>{{r.room}}</strong><br/>
+                {{r.leader_name}}</td>
+            </tr>
+            <tr ng-repeat="s in r.sessions">
+                <td ng-show="s.session_start">{{s.session_start | date:'hh:mm a'}}</td>
+                <td class="session-row">
+                    <div ng-repeat="m in s.members">{{m.user_name}}<i class="fa fa-trash-o k-cursor pull-right" ng-click="cancelRoom(r,s,m)" ng-show="!s.is_past && (m.net_id==user.net_id || user.priv_level>2)"></i></div>
+                    <a class="k-cursor" ng-hide="(s.members.length==r.max_members && r.max_members!=0) || bridge_event.joined==bridge_event.max_sessions || (s.is_member && user.priv_level==1) || s.is_past" ng-click="joinRoom(r,s)">Join</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

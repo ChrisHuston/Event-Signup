@@ -1,0 +1,78 @@
+<div class="row">
+    <div class="form-inline" style="margin-bottom: 10px;">
+        <input type="text" ng-model="evt.event_name" class="form-control" placeholder="Event Name" required style="width:270px;">
+        <input type="datetime-local" placeholder="yyyy-MM-ddTHH:mm" class="form-control" ng-model="evt.event_open"
+               min="2014-08-15T00:00" max="2020-06-22T00:00:00" tooltip="Optional datetime to open sign up" />
+        <input type="datetime-local" placeholder="yyyy-MM-ddTHH:mm" class="form-control" ng-model="evt.event_close"
+               min="2014-08-15T00:00" max="2020-06-22T00:00:00" tooltip="Optional datetime to close sign up" />
+        <label><input type="checkbox" ng-model="admin.multi_event" ng-change="toggle_simple()"/> Multi-Room Event</label>
+    </div>
+    <div class="form-inline" ng-hide="admin.multi_event" style="margin-bottom: 10px;">
+        <input type="text" class="form-control" ng-model="room.room" placeholder="Optional Location" style="width:270px;"/>
+        <input type="datetime-local" placeholder="yyyy-MM-ddTHH:mm" class="form-control" ng-model="room.room_start"
+               min="2014-08-15T00:00" max="2020-06-22T00:00" tooltip="Optional datetime for the event to start" />
+        <input type="datetime-local" placeholder="yyyy-MM-ddTHH:mm" class="form-control" ng-model="room.room_end"
+               min="2014-08-15T00:00" max="2020-06-22T00:00" tooltip="Optional datetime for the event to end" />
+    </div>
+    <div class="form-inline" style="margin-bottom: 10px;">
+        <input type="number" name="input" ng-model="evt.session_duration"
+               min="1" max="9000" class="form-control" style="width:80px;" tooltip="Session time in minutes">
+        <input type="number" name="input" ng-model="evt.max_members"
+               min="1" max="9000" class="form-control" style="width:80px;" tooltip="Max # per session">
+        <input type="number" name="input" ng-model="evt.max_sessions" ng-show="admin.multi_event"
+               min="1" max="10" class="form-control" style="width:60px;" tooltip="Max number of sessions to sign up for">
+        <div class="checkbox" style="margin-left: 40px; margin-right: 10px;">
+            <label for="evtHasWaitList">
+                <input id="evtHasWaitList" type="checkbox" ng-model="evt.has_wait_list" ng-true-value="'1'" ng-false-value="'0'"/> Wait List</label>
+        </div>
+        <div class="checkbox" style="margin-left: 10px; margin-right: 10px;">
+            <label for="evtShowNames">
+                <input id="evtShowNames" type="checkbox" ng-model="evt.show_names" ng-true-value="'1'" ng-false-value="'0'"/> Show Names</label>
+        </div>
+        <div class="checkbox" style="margin-left: 10px; margin-right: 40px;">
+            <label for="evtIsActive">
+                <input id="evtIsActive" type="checkbox" ng-model="evt.is_active" ng-true-value="'1'" ng-false-value="'0'"/> Active</label>
+        </div>
+        <button class="btn btn-primary" ng-click="addNewEvent()" tooltip="Add a new event">Add New</button>
+        <button class="btn btn-success" ng-show="evt.event_id != 0" ng-click="saveEvent()" tooltip="Save changes to the selected event">Save Changes</button>
+    </div>
+
+    <textarea id="event_description" class="form-control"></textarea>
+</div>
+
+<div class="row" style="margin-top: 10px;">
+    <div class="eventsGridStyle" ng-if="showGrid" ng-grid="eventsGridOptions"></div>
+</div>
+
+<div class="db-bar" ng-show="admin.multi_event">
+    <input type="datetime-local" placeholder="yyyy-MM-ddTHH:mm" class="form-control" ng-model="room.room_start"
+           min="2014-08-15T00:00" max="2020-06-22T00:00" tooltip="Optional datetime for the session to start"
+           style="width:240px;"/>
+    <input type="datetime-local" placeholder="yyyy-MM-ddTHH:mm" class="form-control" ng-model="room.room_end"
+           min="2014-08-15T00:00" max="2020-06-22T00:00" tooltip="Optional datetime for the session to end"
+            style="width:240px;"/>
+    <input type="text" class="form-control" ng-model="room.room" placeholder="Location" />
+    <select class="form-control" ng-model="room.net_id" ng-options="u.net_id as u.user_name for u in admin.users | filter:filterUsers"></select>
+    <button class="btn btn-default" ng-click="addRoom()" tooltip="Add a new location or group to the above selected event">New</button>
+    <button class="btn btn-default" ng-click="saveRoom()" tooltip="Save changes to the below selected location or group">Save</button>
+</div>
+
+<div class="row" style="margin-top: 10px;" ng-show="admin.multi_event">
+    <div class="roomsGridStyle" ng-grid="roomsGridOptions"></div>
+</div>
+
+<script type="text/ng-template" id="confirmModal.html">
+    <div class="modal-header">
+        <h3>Confirm Delete</h3>
+    </div>
+    <div class="modal-body">
+        <p>You are about to delete {{itm.name}}. This cannot be undone. Are you sure you want to delete this and all associated data?</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">Yes, delete</button>
+        <button class="btn btn-warning" ng-click="cancel()">No, do NOT delete</button>
+    </div>
+</script>
+
+
+

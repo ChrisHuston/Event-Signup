@@ -1,0 +1,11 @@
+<div class="form-inline" style="margin-bottom: 10px;">
+    <input type="text" ng-model="user.user_name" class="form-control" ng-blur="changeName(user)" placeholder="First Last">
+    <input type="text" ng-model="user.net_id" class="form-control" placeholder="NetID">
+    <select class="form-control" ng-model="user.priv_level" ng-options="l.priv_level as l.label for l in levels"></select>
+    <button class="btn btn-default" ng-click="addNewUser()">Add New User</button>
+    <button class="btn btn-default" ng-click="updateAdmins('TaEnrollment')">Import TAs</button>
+    <button class="btn btn-default" ng-click="updateAdmins('TeacherEnrollment')">Import Teachers</button>
+</div>
+<div class="row" style="margin-top: 10px;">
+    <div class="usersGridStyle" ng-if="showGrid" ng-grid="usersGridOptions"></div>
+</div>

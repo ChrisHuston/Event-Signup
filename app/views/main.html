@@ -1,0 +1,44 @@
+<div class="alert alert-danger" ng-show="user.loginError">
+    <p>Cookies must be enabled for this application to run in Canvas</p>
+    <p>For Chrome:</p>
+    <ol>
+        <li>Click the menu button (three bars icon) in the right in the top menu and select <strong>Settings</strong></li>
+        <li>Click the <strong>Show advanced settings...</strong> link at the bottom.</li>
+        <li>Click the <strong>Content settings</strong> button under Privacy</li>
+        <li>Un-check the <strong>Block third-party cookies and site data</strong></li>
+        <li>OR click Manage exceptions and add "www.kblocks.com" and set to Allow</li>
+    </ol>
+    <p>For Firefox:</p>
+    <ol>
+        <li>Click the menu button (three bars icon) in the right in the top menu and select Preferences</li>
+        <li>Select the <strong>Privacy</strong> panel.</li>
+        <li>Set <strong>Firefox will:</strong> to <strong>Use custom settings for history</strong>.</li>
+        <li>Set <strong>Accept third-party cookies</strong> to <strong>From Visited</strong> or <strong>Always</strong></li>
+    </ol>
+    <p>For Safari:</p>
+    <ol>
+        <li>Click Safari in the top menu and select Preferences</li>
+        <li>Select the <strong>Privacy</strong> tab</li>
+        <li>Select <strong>Never</strong> for <strong>Block cookies and other website data</strong></li>
+        <li>Reload your browser</li>
+    </ol>
+</div>
+<div class="alert alert-info" ng-hide="user.has_events">
+    <p>No events are currently available for sign up.</p>
+</div>
+<div class="list-group">
+    <div class="list-group-item" ng-repeat="evt in bridge.events | filter:{is_active:'1'}">
+        <h4 class="list-group-item-heading">{{evt.event_name}}</h4>
+        <div class="list-group-item-text" ng-bind-html="evt.description"></div>
+        <p ng-hide="evt.room || (evt.eventStart==null && evt.eventEnd==null)"><strong>Event Date: </strong>{{evt.eventStart | date:'MMM dd, h:mm a'}} to {{evt.eventEnd | date:'MMM dd, h:mm a'}}</p>
+        <p ng-show="evt.before_event"><strong>Sign Up Opens: </strong>{{evt.event_open | date:'MMM dd, h:mm a'}}</p>
+        <p ng-hide="evt.room || evt.event_close==null"><strong>Sign Up Closes: </strong>{{evt.event_close | date:'MMM dd, h:mm a'}}</p>
+        <p ng-show="evt.room">
+           <strong>{{evt.room}}<br/>
+            {{evt.session_start | date:'MMMM dd, h:mm'}} - {{evt.session_end | date:'h:mm'}}</strong>
+        </p>
+        <h4 ng-show="evt.event_over">Event Over</h4>
+        <button ng-hide="((evt.before_event || evt.after_event) && !evt.session_start) && user.priv_level<3" class="btn btn-primary" ng-click="selectEvent(evt)">View</button>
+
+    </div>
+</div>

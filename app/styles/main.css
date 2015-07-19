@@ -1,0 +1,105 @@
+body { padding-top: 60px; }
+
+.bridge-logo {
+    padding: 8px 15px;
+}
+
+.k-cursor {
+    cursor: pointer;
+}
+
+.evenday {
+    background-color: #fff3a6 !important;
+}
+
+.oddday {
+    background-color: #b9fc94 !important;
+}
+
+.eventsGridStyle {
+    border: 1px solid rgb(212,212,212);
+    height: 300px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.usersGridStyle {
+    border: 1px solid rgb(212,212,212);
+    height: 500px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.roomsGridStyle {
+    border: 1px solid rgb(212,212,212);
+    height: 300px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.centeredCol {
+    text-align: center;
+}
+
+#event_description {
+    height: 200px;
+}
+
+.description-cell {
+    white-space: normal;
+}
+
+.session-row {
+    min-height: 45px;
+}
+
+
+.db-bar {
+    background-color: #fdfdfd;
+    border: 1px solid #dedede;
+    border-radius: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top:5px;
+    padding-bottom: 0;
+    margin-top:5px;
+    margin-bottom: 5px;
+    height:45px;
+}
+
+.db-bar input[type=date] {
+    display:inline-block;
+    width:160px;
+}
+
+.db-bar input[type=time] {
+    display:inline-block;
+    width:140px;
+}
+
+.db-bar input[type=text] {
+    display:inline-block;
+    width:140px;
+}
+
+.db-bar .form-control {
+    width: 110px;
+    display: inline-block !important;
+}
+
+.db-bar .navbar-btn {
+    margin-top:5px !important;
+}
+
+.full-btn {
+    margin-top: 8px;
+    margin-right: 10px;
+}
+
+@media print {
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+
+
